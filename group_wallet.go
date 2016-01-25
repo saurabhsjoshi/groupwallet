@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"github.com/gorilla/mux"
-	"encoding/json"
 )
 
 func main() {
@@ -15,13 +14,5 @@ func main() {
 }
 
 func Index(w http.ResponseWriter, r *http.Request){
-	user := User{
-		ID: 0,
-		Name: "Saurabh Joshi",
-		Email: "abc@xyz.com",
-		Password: "saltedpassword",
-	}
-	if err := json.NewEncoder(w).Encode(user); err != nil{
-		panic(err)
-	}
+	RegisterUser(w, r)
 }
