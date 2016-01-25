@@ -12,9 +12,19 @@ func NewSuccessStatus() Status{
 	}
 }
 
+func NewDbErrorStatus()  Status{
+	return Status{
+		ResponseCode: 300,
+		Message: "Problem connecting with database!",
+	}
+}
+
 func NewUnknownErrorStatus()  Status{
 	return Status{
 		ResponseCode: 999,
 		Message: "Unknown error!",
 	}
 }
+
+
+

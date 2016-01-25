@@ -35,11 +35,11 @@ var routes = Routes{
 		"/register/",
 		RegisterUser,
 	},
-
+	//Only for testing
 	Route{
 		"getusers",
-		"POST",
-		"/getusers",
+		"GET",
+		"/getusers/",
 		GetAllUsers,
 	},
 }
