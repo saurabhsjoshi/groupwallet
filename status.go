@@ -1,30 +1,38 @@
 package main
 
-type Status struct {
-	ResponseCode int
-	Message string
+type status struct {
+	ResponseCode int `json:"response_code"`
+	Message string   `json:"message"`
 }
 
-func NewSuccessStatus() Status{
-	return Status{
-		ResponseCode: 200,
-		Message: "Query was successful!",
-	}
+type StatusMessage struct {
+	Status status `json:"status"`
 }
 
-func NewDbErrorStatus()  Status{
-	return Status{
-		ResponseCode: 300,
-		Message: "Problem connecting with database!",
-	}
+func NewSuccessStatus() StatusMessage{
+	return StatusMessage{
+		Status: status{
+			ResponseCode: 200,
+			Message: "Query was successful!",
+		}}
 }
 
-func NewUnknownErrorStatus()  Status{
-	return Status{
-		ResponseCode: 999,
-		Message: "Unknown error!",
-	}
+func NewDbErrorStatus()  StatusMessage{
+	return StatusMessage{
+		Status: status{
+			ResponseCode: 300,
+			Message: "Problem connecting with database!",
+		}}
 }
+
+func NewUnknownErrorStatus()  StatusMessage{
+	return StatusMessage{
+		Status: status{
+			ResponseCode: 999,
+			Message: "Unknown error!",
+		}}
+}
+
 
 
 

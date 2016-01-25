@@ -45,7 +45,14 @@ func GetAllUsers (w http.ResponseWriter, r *http.Request){
 		)
 		users = append(users,user)
 	}
-	json.NewEncoder(w).Encode(users)
+	json.NewEncoder(w).Encode(
+		struct{
+			StatusMessage
+			Users
+		} {
+			NewSuccessStatus(),
+			users,
+		})
 
 	db.Close()
 
