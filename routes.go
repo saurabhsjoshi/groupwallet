@@ -35,4 +35,11 @@ var routes = Routes{
 		"/register/",
 		RegisterUser,
 	},
+
+	Route{
+		"getusers",
+		"POST",
+		"/getusers",
+		GetAllUsers,
+	},
 }

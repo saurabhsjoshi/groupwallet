@@ -11,4 +11,9 @@ func RegisterUser (w http.ResponseWriter, r *http.Request) {
 
 }
 
+/* Just for testing db */
+func GetAllUsers (w http.ResponseWriter, r *http.Request){
+
+}
+
 

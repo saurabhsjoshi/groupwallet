@@ -5,15 +5,16 @@ type Status struct {
 	Message string
 }
 
-const (
-	SuccessStatus = Status{
+func NewSuccessStatus() Status{
+	return Status{
 		ResponseCode: 200,
 		Message: "Query was successful!",
 	}
+}
 
-	UnknownErrorStatus = Status{
+func NewUnknownErrorStatus()  Status{
+	return Status{
 		ResponseCode: 999,
 		Message: "Unknown error!",
 	}
-)
-
+}
