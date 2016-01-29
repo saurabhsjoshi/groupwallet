@@ -19,6 +19,7 @@ func RegisterUser (w http.ResponseWriter, r *http.Request) {
 func GetAllUsers (w http.ResponseWriter, r *http.Request){
 	connectionString := os.Getenv("DB_USERNAME") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_URL") + ":3306)/" + os.Getenv("DB_NAME")
 
+
 	db, err := sql.Open("mysql", connectionString)
 
 	if(err != nil){
