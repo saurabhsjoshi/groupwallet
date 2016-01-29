@@ -10,6 +10,11 @@ import (
 /* Handlers for different endpoints */
 
 
+func addHeaders(w http.ResponseWriter) http.ResponseWriter{
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	return w
+}
+
 /* Add a new user to the database */
 func RegisterUser (w http.ResponseWriter, r *http.Request) {
 
@@ -19,7 +24,7 @@ func RegisterUser (w http.ResponseWriter, r *http.Request) {
 func GetAllUsers (w http.ResponseWriter, r *http.Request){
 	connectionString := os.Getenv("DB_USERNAME") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_URL") + ":3306)/" + os.Getenv("DB_NAME")
 
-
+	w = addHeaders(w)
 	db, err := sql.Open("mysql", connectionString)
 
 	if(err != nil){
