@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 )
 
+/* TODO: Clean up db code and manage errors gracefully*/
 /* Handlers for different endpoints */
 
 
@@ -15,17 +16,60 @@ func addHeaders(w http.ResponseWriter) http.ResponseWriter{
 	return w
 }
 
+func connectToDb() (*sql.DB, error) {
+	connectionString := os.Getenv("DB_USERNAME") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_URL") + ":3306)/" + os.Getenv("DB_NAME")
+	return sql.Open("mysql", connectionString)
+}
+
 /* Add a new user to the database */
 func RegisterUser (w http.ResponseWriter, r *http.Request) {
+	/* TODO: Add auth and hash password */
+	db, err := connectToDb()
 
+	if err != nil {
+		json.NewEncoder(w).Encode(NewDbErrorStatus())
+		panic(err)
+	}
+
+	user := User{
+		Name: r.FormValue("name"),
+		Email:r.FormValue("email"),
+		Password:r.FormValue("password"),
+		Token:"",
+	}
+
+	stmt, err := db.Prepare(QUERY_INSERT_USER)
+
+	if err != nil{
+		panic(err)
+	}
+
+	res, err := stmt.Exec(
+		user.Name,
+		user.Email,
+		user.Password,
+		user.Token,
+	)
+	if err!=nil {
+		panic(err)
+	}
+	user.ID,_ = res.LastInsertId()
+
+	json.NewEncoder(w).Encode(
+			struct{
+			StatusMessage
+			User
+		} {
+			NewSuccessStatus(),
+			user,
+		})
 }
 
 /* Just for testing db */
 func GetAllUsers (w http.ResponseWriter, r *http.Request){
-	connectionString := os.Getenv("DB_USERNAME") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_URL") + ":3306)/" + os.Getenv("DB_NAME")
 
 	w = addHeaders(w)
-	db, err := sql.Open("mysql", connectionString)
+	db, err := connectToDb()
 
 	if(err != nil){
 		json.NewEncoder(w).Encode(NewDbErrorStatus())

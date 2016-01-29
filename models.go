@@ -4,7 +4,7 @@ import "time"
 
 // User model in DB
 type User struct {
-	ID int				`json:"id"`
+	ID int64			`json:"id"`
 	Name string			`json:"name"`
 	Email string		`json:"email"`
 	Password string		`json:"-"`
@@ -17,7 +17,7 @@ type Users [] User
 
 //Item model in DB
 type Item struct {
-	ID int				`json:"id"`
+	ID int64			`json:"id"`
 	Owner int			`json:"owner"`
 	Place string		`json:"place"`
 	Extra string		`json:"extra"`
