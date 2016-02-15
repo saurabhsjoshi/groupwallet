@@ -24,6 +24,17 @@ type Item struct {
 	Price float32		`json:"price"`
 	CreatedOn time.Time	`json:"createdOn"`
 }
-
 // Slice of items
 type Items[] Item
+
+type Group struct {
+	ID int64			`json:"id"`
+	Title string		`json:"title"`
+	Admin int64			`json:"admin"`
+	GroupMembers Users	`json:"users"`
+	GroupItems Items    `json:"items"`
+}
+
+//Slice of groups
+type Groups[] Group
+
