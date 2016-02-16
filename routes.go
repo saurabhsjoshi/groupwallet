@@ -41,6 +41,12 @@ var routes = Routes{
 		"/register/",
 		RegisterUser,
 	},
+	Route{
+		"additem",
+		"POST",
+		"/additem/",
+		AddItem,
+	},
 	//Only for testing
 	Route{
 		"getusers",
@@ -48,4 +54,5 @@ var routes = Routes{
 		"/getusers/",
 		GetAllUsers,
 	},
+
 }

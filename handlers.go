@@ -21,6 +21,52 @@ func connectToDb() (*sql.DB, error) {
 	return sql.Open("mysql", connectionString)
 }
 
+func AddItem(w http.ResponseWriter, r *http.Request) {
+	db, err := connectToDb()
+
+	if(err!= nil) {
+		json.NewEncoder(w).Encode(NewDbErrorStatus())
+		panic(err)
+	}
+
+	item := Item{
+		Title: r.FormValue("title"),
+		Owner: r.FormValue("owner"),
+		Place: r.FormValue("place"),
+		Extra: r.FormValue("extra"),
+		Price: r.FormValue("price"),
+	}
+
+	stmt, err := db.Prepare(QUERY_INSERT_ITEM)
+
+	if(err != nil){
+		panic(err)
+	}
+
+	res, err := stmt.Exec(
+		item.Title,
+		item.Owner,
+		item.Place,
+		item.Extra,
+		item.Price,
+	)
+
+	if(err != nil){
+		panic(err)
+	}
+
+	item.ID,_ = res.LastInsertId()
+
+	json.NewEncoder(w).Encode(
+			struct{
+			StatusMessage
+			Item
+		} {
+			NewSuccessStatus(),
+			item,
+		})
+}
+
 /* Add a new user to the database */
 func RegisterUser (w http.ResponseWriter, r *http.Request) {
 	/* TODO: Add auth and hash password */

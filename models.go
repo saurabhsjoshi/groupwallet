@@ -18,6 +18,7 @@ type Users [] User
 //Item model in DB
 type Item struct {
 	ID int64			`json:"id"`
+	Title string        `json:"title"`
 	Owner int			`json:"owner"`
 	Place string		`json:"place"`
 	Extra string		`json:"extra"`
