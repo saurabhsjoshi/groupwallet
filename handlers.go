@@ -67,6 +67,48 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 		})
 }
 
+func CreateGroup(w http.ResponseWriter, r *http.Request) {
+	/* TODO: Add auth and hash password */
+	db, err := connectToDb()
+
+	if err != nil {
+		json.NewEncoder(w).Encode(NewDbErrorStatus())
+		panic(err)
+	}
+
+	group := Group{
+		Title: r.FormValue("name"),
+		Admin:r.FormValue("adminId"),
+	}
+
+	stmt, err := db.Prepare(QUERY_INSERT_GROUP)
+
+	if err != nil{
+		panic (err)
+	}
+
+	res, err := stmt.Exec(
+		group.Title,
+		group.Admin,
+	)
+	if err!= nil{
+		panic(err)
+	}
+
+	group.ID, _ = res.LastInsertId()
+
+	json.NewEncoder(w).Encode(
+			struct{
+			StatusMessage
+			Group
+		} {
+			NewSuccessStatus(),
+			group,
+		})
+
+
+}
+
 /* Add a new user to the database */
 func RegisterUser (w http.ResponseWriter, r *http.Request) {
 	/* TODO: Add auth and hash password */

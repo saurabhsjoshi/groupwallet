@@ -34,6 +34,7 @@ type Group struct {
 	Admin int64			`json:"admin"`
 	GroupMembers Users	`json:"users"`
 	GroupItems Items    `json:"items"`
+	CreatedOn time.Time `json:"createdOn"`
 }
 
 //Slice of groups

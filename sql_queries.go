@@ -13,5 +13,15 @@ const (
 		VALUES (?,?,?,?,?,NOW())
 	`
 
+	QUERY_INSERT_GROUP =
+	`	INSERT INTO groups (title, admin, created_on)
+		VALUES (?,?, NOW())
+	`
+
+	QUERY_INSERT_USER_INTO_GROUP =
+	`	INSERT INTO ugr (u_id, g_id)
+		VALUES (?,?)
+	`
+
 	QUERY_GET_ALL_USERS = "SELECT id, name, email, token, created_on FROM users"
 )

@@ -47,6 +47,12 @@ var routes = Routes{
 		"/additem/",
 		AddItem,
 	},
+	Route{
+		"creategroup",
+		"POST",
+		"/creategroup/",
+		CreateGroup,
+	},
 	//Only for testing
 	Route{
 		"getusers",
@@ -54,5 +60,4 @@ var routes = Routes{
 		"/getusers/",
 		GetAllUsers,
 	},
-
 }
