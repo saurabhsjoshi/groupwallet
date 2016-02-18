@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"encoding/json"
+	"strconv"
 )
 
 /* TODO: Clean up db code and manage errors gracefully*/
@@ -29,16 +30,25 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	owner_id,err := strconv.ParseInt(r.FormValue("owner"),10, 64)
+	if(err != nil){
+		panic(err)
+	}
+
+	price, err := strconv.ParseFloat(r.FormValue("price"),64)
+	if(err!=nil){
+		panic(err)
+	}
+
 	item := Item{
 		Title: r.FormValue("title"),
-		Owner: r.FormValue("owner"),
+		Owner: owner_id,
 		Place: r.FormValue("place"),
 		Extra: r.FormValue("extra"),
-		Price: r.FormValue("price"),
+		Price: price,
 	}
 
 	stmt, err := db.Prepare(QUERY_INSERT_ITEM)
-
 	if(err != nil){
 		panic(err)
 	}
@@ -76,9 +86,13 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	admin, err := strconv.ParseInt(r.FormValue("adminId"), 10, 64)
+	if(err!=nil){
+		panic(err)
+	}
 	group := Group{
 		Title: r.FormValue("name"),
-		Admin:r.FormValue("adminId"),
+		Admin: admin,
 	}
 
 	stmt, err := db.Prepare(QUERY_INSERT_GROUP)
