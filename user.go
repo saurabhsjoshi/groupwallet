@@ -1,8 +1,8 @@
 package main
 
 import (
-	"time"
 	"log"
+	"time"
 )
 
 // User model in DB
@@ -18,10 +18,10 @@ type User struct {
 // Slice of users
 type Users []User
 
-func (user *User) GetFromDb(id int64) error{
-	db,err := ConnectToDb()
+func (user *User) GetFromDb(id int64) error {
+	db, err := ConnectToDb()
 
-	if err!= nil{
+	if err != nil {
 		return TNewDbErrorStatus()
 	}
 
@@ -29,7 +29,7 @@ func (user *User) GetFromDb(id int64) error{
 		&user.ID, &user.Name, &user.Email,
 		&user.Token)
 
-	if err!= nil{
+	if err != nil {
 		log.Print("Failed to get user by ID ", err)
 		return TNewDbErrorStatus()
 	}

@@ -121,19 +121,19 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 func GetUserById(w http.ResponseWriter, r *http.Request) {
 	var u User
 	id, err := strconv.ParseInt(r.FormValue("userId"), 10, 64)
-	if(err != nil){
+	if err != nil {
 		panic(NewUnknownErrorStatus())
 	}
 	err = u.GetFromDb(id)
 
-	if(err!=nil){
+	if err != nil {
 		panic(NewDbErrorStatus())
 	}
 
 	json.NewEncoder(w).Encode(
-		struct{
+		struct {
 			StatusMessage
-			User        	`json:"User"`
+			User `json:"User"`
 		}{
 			NewSuccessStatus(),
 			u,
