@@ -1,19 +1,18 @@
 package main
+
 import (
-	"net/http"
 	"github.com/gorilla/mux"
+	"net/http"
 )
 
-
 type Route struct {
-	Name string
-	Method string
-	Pattern string
+	Name        string
+	Method      string
+	Pattern     string
 	HandlerFunc http.HandlerFunc
 }
 
-type Routes[] Route
-
+type Routes []Route
 
 func NewRouter() *mux.Router {
 

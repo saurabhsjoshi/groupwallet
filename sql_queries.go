@@ -1,25 +1,19 @@
 package main
 
-
 const (
-
-	QUERY_INSERT_USER =
-	`	INSERT INTO users (name, email, password, token, created_on)
+	QUERY_INSERT_USER = `	INSERT INTO users (name, email, password, token, created_on)
 		VALUES (?,?,?,?,NOW())
 	`
 
-	QUERY_INSERT_ITEM =
-	`	INSERT INTO items (title, owner, place, extra, price, created_on)
+	QUERY_INSERT_ITEM = `	INSERT INTO items (title, owner, place, extra, price, created_on)
 		VALUES (?,?,?,?,?,NOW())
 	`
 
-	QUERY_INSERT_GROUP =
-	`	INSERT INTO groups (title, admin, created_on)
+	QUERY_INSERT_GROUP = `	INSERT INTO groups (title, admin, created_on)
 		VALUES (?,?, NOW())
 	`
 
-	QUERY_INSERT_USER_INTO_GROUP =
-	`	INSERT INTO ugr (u_id, g_id)
+	QUERY_INSERT_USER_INTO_GROUP = `	INSERT INTO ugr (u_id, g_id)
 		VALUES (?,?)
 	`
 

@@ -1,10 +1,11 @@
 package main
+
 import (
-	_ "github.com/go-sql-driver/mysql"
 	"database/sql"
+	"encoding/json"
+	_ "github.com/go-sql-driver/mysql"
 	"net/http"
 	"os"
-	"encoding/json"
 	"strconv"
 )
 
@@ -19,18 +20,18 @@ func connectToDb() (*sql.DB, error) {
 func AddItem(w http.ResponseWriter, r *http.Request) {
 	db, err := connectToDb()
 
-	if(err!= nil) {
+	if err != nil {
 		json.NewEncoder(w).Encode(NewDbErrorStatus())
 		panic(err)
 	}
 
-	owner_id,err := strconv.ParseInt(r.FormValue("owner"),10, 64)
-	if(err != nil){
+	owner_id, err := strconv.ParseInt(r.FormValue("owner"), 10, 64)
+	if err != nil {
 		panic(err)
 	}
 
-	price, err := strconv.ParseFloat(r.FormValue("price"),64)
-	if(err!=nil){
+	price, err := strconv.ParseFloat(r.FormValue("price"), 64)
+	if err != nil {
 		panic(err)
 	}
 
@@ -43,7 +44,7 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	stmt, err := db.Prepare(QUERY_INSERT_ITEM)
-	if(err != nil){
+	if err != nil {
 		panic(err)
 	}
 
@@ -55,17 +56,17 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 		item.Price,
 	)
 
-	if(err != nil){
+	if err != nil {
 		panic(err)
 	}
 
-	item.ID,_ = res.LastInsertId()
+	item.ID, _ = res.LastInsertId()
 
 	json.NewEncoder(w).Encode(
-			struct{
+		struct {
 			StatusMessage
 			Item
-		} {
+		}{
 			NewSuccessStatus(),
 			item,
 		})
@@ -81,7 +82,7 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	admin, err := strconv.ParseInt(r.FormValue("adminId"), 10, 64)
-	if(err!=nil){
+	if err != nil {
 		panic(err)
 	}
 	group := Group{
@@ -91,34 +92,33 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 
 	stmt, err := db.Prepare(QUERY_INSERT_GROUP)
 
-	if err != nil{
-		panic (err)
+	if err != nil {
+		panic(err)
 	}
 
 	res, err := stmt.Exec(
 		group.Title,
 		group.Admin,
 	)
-	if err!= nil{
+	if err != nil {
 		panic(err)
 	}
 
 	group.ID, _ = res.LastInsertId()
 
 	json.NewEncoder(w).Encode(
-			struct{
+		struct {
 			StatusMessage
 			Group
-		} {
+		}{
 			NewSuccessStatus(),
 			group,
 		})
 
-
 }
 
 /* Add a new user to the database */
-func RegisterUser (w http.ResponseWriter, r *http.Request) {
+func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	/* TODO: Add auth and hash password */
 	db, err := connectToDb()
 
@@ -128,15 +128,15 @@ func RegisterUser (w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := User{
-		Name: r.FormValue("name"),
-		Email:r.FormValue("email"),
-		Password:r.FormValue("password"),
-		Token:"",
+		Name:     r.FormValue("name"),
+		Email:    r.FormValue("email"),
+		Password: r.FormValue("password"),
+		Token:    "",
 	}
 
 	stmt, err := db.Prepare(QUERY_INSERT_USER)
 
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 
@@ -146,32 +146,32 @@ func RegisterUser (w http.ResponseWriter, r *http.Request) {
 		user.Password,
 		user.Token,
 	)
-	if err!=nil {
+	if err != nil {
 		panic(err)
 	}
-	user.ID,_ = res.LastInsertId()
+	user.ID, _ = res.LastInsertId()
 
 	json.NewEncoder(w).Encode(
-			struct{
+		struct {
 			StatusMessage
 			User
-		} {
+		}{
 			NewSuccessStatus(),
 			user,
 		})
 }
 
 /* Just for testing db */
-func GetAllUsers (w http.ResponseWriter, r *http.Request){
+func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	db, err := connectToDb()
 
-	if(err != nil){
+	if err != nil {
 		json.NewEncoder(w).Encode(NewDbErrorStatus())
 		panic(err)
 	}
 
 	rows, err := db.Query(QUERY_GET_ALL_USERS)
-	if(err != nil){
+	if err != nil {
 		json.NewEncoder(w).Encode(NewDbErrorStatus())
 		panic(err)
 	}
@@ -187,13 +187,13 @@ func GetAllUsers (w http.ResponseWriter, r *http.Request){
 			&user.Token,
 			&user.CreatedOn,
 		)
-		users = append(users,user)
+		users = append(users, user)
 	}
 	json.NewEncoder(w).Encode(
-		struct{
+		struct {
 			StatusMessage
 			Users
-		} {
+		}{
 			NewSuccessStatus(),
 			users,
 		})
@@ -201,5 +201,3 @@ func GetAllUsers (w http.ResponseWriter, r *http.Request){
 	db.Close()
 
 }
-
-
