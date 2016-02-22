@@ -11,12 +11,6 @@ import (
 /* TODO: Clean up db code and manage errors gracefully*/
 /* Handlers for different endpoints */
 
-
-func addHeaders(w http.ResponseWriter) http.ResponseWriter{
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	return w
-}
-
 func connectToDb() (*sql.DB, error) {
 	connectionString := os.Getenv("DB_USERNAME") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_URL") + ":3306)/" + os.Getenv("DB_NAME")
 	return sql.Open("mysql", connectionString)
@@ -169,8 +163,6 @@ func RegisterUser (w http.ResponseWriter, r *http.Request) {
 
 /* Just for testing db */
 func GetAllUsers (w http.ResponseWriter, r *http.Request){
-
-	w = addHeaders(w)
 	db, err := connectToDb()
 
 	if(err != nil){
