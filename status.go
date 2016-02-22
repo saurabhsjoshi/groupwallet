@@ -9,6 +9,10 @@ type StatusMessage struct {
 	Status status `json:"status"`
 }
 
+func (statusMessage *StatusMessage) Error() string {
+	return statusMessage.Status.Message
+}
+
 func NewSuccessStatus() StatusMessage {
 	return StatusMessage{
 		Status: status{
@@ -19,6 +23,14 @@ func NewSuccessStatus() StatusMessage {
 
 func NewDbErrorStatus() StatusMessage {
 	return StatusMessage{
+		Status: status{
+			ResponseCode: 300,
+			Message:      "Problem connecting with database!",
+		}}
+}
+
+func TNewDbErrorStatus() *StatusMessage {
+	return &StatusMessage{
 		Status: status{
 			ResponseCode: 300,
 			Message:      "Problem connecting with database!",

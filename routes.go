@@ -52,6 +52,12 @@ var routes = Routes{
 		"/creategroup/",
 		CreateGroup,
 	},
+	Route{
+		"getuserbyid",
+		"POST",
+		"/getuserbyid/",
+		GetUserById,
+	},
 	//Only for testing
 	Route{
 		"getusers",

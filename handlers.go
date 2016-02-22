@@ -117,6 +117,29 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 
 }
 
+/* Get user by id */
+func GetUserById(w http.ResponseWriter, r *http.Request) {
+	var u User
+	id, err := strconv.ParseInt(r.FormValue("userId"), 10, 64)
+	if(err != nil){
+		panic(NewUnknownErrorStatus())
+	}
+	err = u.GetFromDb(id)
+
+	if(err!=nil){
+		panic(NewDbErrorStatus())
+	}
+
+	json.NewEncoder(w).Encode(
+		struct{
+			StatusMessage
+			User        	`json:"User"`
+		}{
+			NewSuccessStatus(),
+			u,
+		})
+}
+
 /* Add a new user to the database */
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	/* TODO: Add auth and hash password */
