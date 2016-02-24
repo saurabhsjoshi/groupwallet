@@ -27,7 +27,7 @@ func (user *User) GetFromDb(id int64) error {
 
 	err = db.QueryRow(QUERY_GET_USER_BY_ID, id).Scan(
 		&user.ID, &user.Name, &user.Email,
-		&user.Token)
+		&user.Token, &user.CreatedOn)
 
 	if err != nil {
 		log.Print("Failed to get user by ID ", err)

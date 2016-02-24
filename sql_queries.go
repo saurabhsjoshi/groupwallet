@@ -19,5 +19,5 @@ const (
 
 	QUERY_GET_ALL_USERS = "SELECT id, name, email, token, created_on FROM users"
 
-	QUERY_GET_USER_BY_ID = "SELECT id, name, email, token FROM users WHERE id = ?"
+	QUERY_GET_USER_BY_ID = "SELECT id, name, email, token, created_on FROM users WHERE id = ?"
 )
