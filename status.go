@@ -1,5 +1,7 @@
 package main
 
+import "log"
+
 type status struct {
 	ResponseCode int    `json:"response_code"`
 	Message      string `json:"message"`
@@ -29,11 +31,23 @@ func NewDbErrorStatus() StatusMessage {
 		}}
 }
 
-func TNewDbErrorStatus() *StatusMessage {
+func TNewDbErrorStatus(message string, err error) *StatusMessage {
+	log.Print("ERROR: ", err)
 	return &StatusMessage{
 		Status: status{
 			ResponseCode: 300,
-			Message:      "Problem connecting with database!",
+			Message:      "DB Error: " + message,
+		}}
+
+}
+
+func NewUnmarshallErrorStatus(message string, err error) *StatusMessage {
+	log.Print("ERROR: ", err)
+
+	return &StatusMessage{
+		Status: status{
+			ResponseCode: 100,
+			Message:      "Ums Error: " + message,
 		}}
 }
 

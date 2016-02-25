@@ -21,6 +21,5 @@ func AddHeader(inner http.Handler, name string) http.Handler {
 				}
 			}()
 			inner.ServeHTTP(w, r)
-
 		})
 }

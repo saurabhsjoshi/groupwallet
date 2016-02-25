@@ -2,7 +2,7 @@ package main
 
 const (
 	QUERY_INSERT_USER = `	INSERT INTO users (name, email, password, token, created_on)
-		VALUES (?,?,?,?,NOW())
+		VALUES (?,?,?,?,?)
 	`
 
 	QUERY_INSERT_ITEM = `	INSERT INTO items (title, owner, place, extra, price, created_on)

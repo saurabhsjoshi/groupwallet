@@ -121,13 +121,15 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 func GetUserById(w http.ResponseWriter, r *http.Request) {
 	var u User
 	id, err := strconv.ParseInt(r.FormValue("userId"), 10, 64)
+
 	if err != nil {
 		panic(NewUnknownErrorStatus())
 	}
+
 	err = u.GetFromDb(id)
 
 	if err != nil {
-		panic(NewDbErrorStatus())
+		panic(err)
 	}
 
 	json.NewEncoder(w).Encode(
@@ -143,45 +145,25 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 /* Add a new user to the database */
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	/* TODO: Add auth and hash password */
-	db, err := connectToDb()
 
-	if err != nil {
-		json.NewEncoder(w).Encode(NewDbErrorStatus())
+	var u User
+
+	if err := u.UnmarshallHTTP(r); err != nil {
 		panic(err)
 	}
 
-	user := User{
-		Name:     r.FormValue("name"),
-		Email:    r.FormValue("email"),
-		Password: r.FormValue("password"),
-		Token:    "",
-	}
-
-	stmt, err := db.Prepare(QUERY_INSERT_USER)
-
-	if err != nil {
+	if _, err := u.PutInDb(); err != nil {
 		panic(err)
+	} else {
+		json.NewEncoder(w).Encode(
+			struct {
+				StatusMessage
+				User
+			}{
+				NewSuccessStatus(),
+				u,
+			})
 	}
-
-	res, err := stmt.Exec(
-		user.Name,
-		user.Email,
-		user.Password,
-		user.Token,
-	)
-	if err != nil {
-		panic(err)
-	}
-	user.ID, _ = res.LastInsertId()
-
-	json.NewEncoder(w).Encode(
-		struct {
-			StatusMessage
-			User
-		}{
-			NewSuccessStatus(),
-			user,
-		})
 }
 
 /* Just for testing db */
