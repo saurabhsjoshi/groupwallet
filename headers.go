@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -15,7 +14,6 @@ func AddHeader(inner http.Handler, name string) http.Handler {
 					//Catch & Return error
 					w.WriteHeader(http.StatusInternalServerError)
 					json.NewEncoder(w).Encode(r)
-					fmt.Println(r)
 				} else {
 					w.WriteHeader(http.StatusOK)
 				}

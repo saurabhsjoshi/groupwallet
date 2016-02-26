@@ -1,8 +1,10 @@
 package main
 
 import (
+	"database/sql"
 	"errors"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -23,15 +25,17 @@ func (user *User) GetFromDb(id int64) error {
 	db, err := ConnectToDb()
 
 	if err != nil {
-		return TNewDbErrorStatus("Could not connect to db.", err)
+		return NewDbErrorStatus("Could not connect to db.", err)
 	}
 
 	err = db.QueryRow(QUERY_GET_USER_BY_ID, id).Scan(
 		&user.ID, &user.Name, &user.Email,
 		&user.Token, &user.CreatedOn)
 
-	if err != nil {
-		return TNewDbErrorStatus("Failed to get user from db.", err)
+	if err == sql.ErrNoRows {
+		return NewNotFoundErrorStatus("User with id "+strconv.FormatInt(id, 10)+" not found.", err)
+	} else if err != nil {
+		return NewDbErrorStatus("Failed to get user from db.", err)
 	}
 
 	return nil
@@ -41,11 +45,11 @@ func (user *User) PutInDb() (int64, error) {
 	db, err := ConnectToDb()
 
 	if err != nil {
-		return -1, TNewDbErrorStatus("Could not connect to db.", err)
+		return -1, NewDbErrorStatus("Could not connect to db.", err)
 	}
 	stmt, err := db.Prepare(QUERY_INSERT_USER)
 	if err != nil {
-		return -1, TNewDbErrorStatus("Could not create statement.", err)
+		return -1, NewDbErrorStatus("Could not create statement.", err)
 	}
 	user.CreatedOn = time.Now()
 

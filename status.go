@@ -23,15 +23,17 @@ func NewSuccessStatus() StatusMessage {
 		}}
 }
 
-func NewDbErrorStatus() StatusMessage {
-	return StatusMessage{
+func NewNotFoundErrorStatus(message string, err error) *StatusMessage {
+	log.Print("ERROR: ", err)
+	return &StatusMessage{
 		Status: status{
-			ResponseCode: 300,
-			Message:      "Problem connecting with database!",
+			ResponseCode: 310,
+			Message:      "Not Found: " + message,
 		}}
+
 }
 
-func TNewDbErrorStatus(message string, err error) *StatusMessage {
+func NewDbErrorStatus(message string, err error) *StatusMessage {
 	log.Print("ERROR: ", err)
 	return &StatusMessage{
 		Status: status{

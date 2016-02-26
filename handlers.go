@@ -21,8 +21,7 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 	db, err := connectToDb()
 
 	if err != nil {
-		json.NewEncoder(w).Encode(NewDbErrorStatus())
-		panic(err)
+		panic(NewDbErrorStatus("Could not connect to db.", err))
 	}
 
 	owner_id, err := strconv.ParseInt(r.FormValue("owner"), 10, 64)
@@ -77,8 +76,7 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 	db, err := connectToDb()
 
 	if err != nil {
-		json.NewEncoder(w).Encode(NewDbErrorStatus())
-		panic(err)
+		panic(NewDbErrorStatus("Could not connect to db.", err))
 	}
 
 	admin, err := strconv.ParseInt(r.FormValue("adminId"), 10, 64)
@@ -171,14 +169,13 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	db, err := connectToDb()
 
 	if err != nil {
-		json.NewEncoder(w).Encode(NewDbErrorStatus())
-		panic(err)
+		panic(NewDbErrorStatus("Could not connect to db.", err))
 	}
 
 	rows, err := db.Query(QUERY_GET_ALL_USERS)
+
 	if err != nil {
-		json.NewEncoder(w).Encode(NewDbErrorStatus())
-		panic(err)
+		panic(NewDbErrorStatus("Could not get users.", err))
 	}
 
 	users := Users{}
@@ -204,5 +201,4 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 		})
 
 	db.Close()
-
 }
