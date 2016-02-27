@@ -17,7 +17,11 @@ const (
 		VALUES (?,?)
 	`
 
+	QUERY_UPDATE_USER = "UPDATE users SET name = ? , email = ?, password = ? , token = ? WHERE id = ?"
+
 	QUERY_GET_ALL_USERS = "SELECT id, name, email, token, created_on FROM users"
 
 	QUERY_GET_USER_BY_ID = "SELECT id, name, email, token, created_on FROM users WHERE id = ?"
+
+	QUERY_DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?"
 )

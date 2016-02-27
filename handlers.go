@@ -26,12 +26,12 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 
 	owner_id, err := strconv.ParseInt(r.FormValue("owner"), 10, 64)
 	if err != nil {
-		panic(err)
+		panic(NewUnmarshallErrorStatus("Could not parse owner id.", err))
 	}
 
 	price, err := strconv.ParseFloat(r.FormValue("price"), 64)
 	if err != nil {
-		panic(err)
+		panic(NewUnmarshallErrorStatus("Could not parse price of item.", err))
 	}
 
 	item := Item{
@@ -161,6 +161,25 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 				NewSuccessStatus(),
 				u,
 			})
+	}
+}
+
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	var u User
+	if user_id, err := strconv.ParseInt(r.FormValue("id"), 10, 64); err != nil {
+		panic(NewUnmarshallErrorStatus("Could not parse admin id.", err))
+	} else {
+		u.ID = user_id
+	}
+
+	if err := u.UnmarshallHTTP(r); err != nil {
+		panic(err)
+	}
+
+	if err := u.DeleteFromDb(); err != nil {
+		panic(err)
+	} else {
+		json.NewEncoder(w).Encode(NewSuccessStatus())
 	}
 }
 

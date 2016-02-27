@@ -58,6 +58,12 @@ var routes = Routes{
 		"/getuserbyid/",
 		GetUserById,
 	},
+	Route{
+		"deleteuser",
+		"POST",
+		"/deleteuser/",
+		DeleteUser,
+	},
 	//Only for testing
 	Route{
 		"getusers",
