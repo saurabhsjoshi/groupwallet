@@ -24,22 +24,10 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 		panic(NewDbErrorStatus("Could not connect to db.", err))
 	}
 
-	owner_id, err := strconv.ParseInt(r.FormValue("owner"), 10, 64)
-	if err != nil {
-		panic(NewUnmarshallErrorStatus("Could not parse owner id.", err))
-	}
+	var item Item
 
-	price, err := strconv.ParseFloat(r.FormValue("price"), 64)
-	if err != nil {
-		panic(NewUnmarshallErrorStatus("Could not parse price of item.", err))
-	}
-
-	item := Item{
-		Title: r.FormValue("title"),
-		Owner: owner_id,
-		Place: r.FormValue("place"),
-		Extra: r.FormValue("extra"),
-		Price: price,
+	if err := item.UnmarshallHTTP(r); err != nil {
+		panic(err)
 	}
 
 	stmt, err := db.Prepare(QUERY_INSERT_ITEM)
